@@ -16,7 +16,10 @@ namespace PointOfSale.Controllers
         {
             return View();
         }
-
+        public ActionResult AccessDenied()
+        {
+            return View();
+        }
         public ActionResult Login()
         {
             return View();
@@ -24,11 +27,13 @@ namespace PointOfSale.Controllers
         public JsonResult CheckLogin(string username,string password)
         {
             POS_TutorialEntities db = new POS_TutorialEntities();
-            var dataItem = db.Users.Where(x => x.Username == username && x.Password == password).SingleOrDefault();
+            string md5StringPassword = AppHelper.GetMd5Hash(password);
+            var dataItem = db.Users.Where(x => x.Username == username && x.Password == md5StringPassword).SingleOrDefault();
             bool isLogged = true;
             if (dataItem != null)
             {
                 Session["Username"] = dataItem.Username;
+                Session["Role"] = dataItem.Role;
                 isLogged = true;
             }
             else

@@ -20,6 +20,11 @@ namespace PointOfSale.Controllers
         {
             return View();
         }
+        [AuthorizationFilter]
+        public ActionResult UserCreate()
+        {
+            return View();
+        }
         public ActionResult Login()
         {
             return View();

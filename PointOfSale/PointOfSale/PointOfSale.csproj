@@ -2079,6 +2079,7 @@
     <Content Include="Template\sbAdmin2\vendor\jquery\jquery.slim.min.map" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\AccessDenied.cshtml" />
+    <Content Include="Views\Home\UserCreate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

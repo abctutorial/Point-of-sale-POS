@@ -29,7 +29,7 @@ namespace PointOfSale.Controllers
         {
             return View();
         }
-        public JsonResult CheckLogin(string username,string password)
+        public JsonResult CheckLogin(string username, string password)
         {
             POS_TutorialEntities db = new POS_TutorialEntities();
             string md5StringPassword = AppHelper.GetMd5Hash(password);
@@ -46,6 +46,25 @@ namespace PointOfSale.Controllers
                 isLogged = false;
             }
             return Json(isLogged, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public JsonResult SaveUser(User user)
+        {
+            POS_TutorialEntities db = new POS_TutorialEntities();
+            bool isSuccess = true;
+            try
+            {
+                user.Status = 1;
+                user.Password = AppHelper.GetMd5Hash(user.Password);
+                db.Users.Add(user);
+                db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                isSuccess = false;
+            }
+
+            return Json(isSuccess, JsonRequestBehavior.AllowGet);
         }
     }
 }

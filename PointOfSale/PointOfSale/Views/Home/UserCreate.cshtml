@@ -21,7 +21,17 @@
                             <input type="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Password">
                         </div>
                         <div class="form-group col-md-6">
-                            <a href="#" onclick="checkLogin()" class="btn btn-primary btn-sm">
+                            <input type="password" class="form-control form-control-user" id="exampleInputPasswordRetype" placeholder="Re-Type Password">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <select class="form-control" id="role">
+                                <option value="">--Select--</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Editor">Editor</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <a href="#" onclick="SaveUser()" class="btn btn-primary btn-sm">
                                 Login
                             </a>
                         </div>
@@ -527,3 +537,47 @@
     </div>
 </div>
 
+<script>
+
+    function SaveUser() {
+        var user = new Object();
+        user.Username = $("#exampleInputUser").val();
+        user.Password = $("#exampleInputPassword").val();
+        user.Role = $("#role").val();
+        var data = JSON.stringify({
+            user: user
+        });
+        return $.ajax({
+
+            contentType: 'application/json; charset=utf-8',
+
+            dataType: 'json',
+
+            type: 'POST',
+
+            url: "/Home/SaveUser",
+
+            data: data,
+
+            success: function (result) {
+                if (result == true) {
+                    alert("Save Success!");
+                }
+
+                else {
+                    alert("Save failed!");
+                }
+
+            },
+
+            error: function () {
+
+                alert("Error!")
+
+            }
+
+        });
+
+    }
+
+</script>

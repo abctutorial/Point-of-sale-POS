@@ -2,6 +2,7 @@
 using PointOfSale.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -52,11 +53,19 @@ namespace PointOfSale.Controllers
         {
             POS_TutorialEntities db = new POS_TutorialEntities();
             bool isSuccess = true;
-            try
+
+            if (user.UserId>0)
+            {
+                db.Entry(user).State = EntityState.Modified;
+            }
+            else
             {
                 user.Status = 1;
                 user.Password = AppHelper.GetMd5Hash(user.Password);
                 db.Users.Add(user);
+            }
+            try
+            {
                 db.SaveChanges();
             }
             catch (Exception)
@@ -65,6 +74,13 @@ namespace PointOfSale.Controllers
             }
 
             return Json(isSuccess, JsonRequestBehavior.AllowGet);
+        }
+        [HttpGet]
+        public JsonResult GetAllUser()
+        {
+            POS_TutorialEntities db = new POS_TutorialEntities();
+            var dataList = db.Users.Where(x=>x.Status==1).ToList();
+            return Json(dataList, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -21,11 +21,6 @@ namespace PointOfSale.Controllers
         {
             return View();
         }
-        [AuthorizationFilter]
-        public ActionResult UserCreate()
-        {
-            return View();
-        }
         public ActionResult Login()
         {
             return View();
@@ -47,6 +42,11 @@ namespace PointOfSale.Controllers
                 isLogged = false;
             }
             return Json(isLogged, JsonRequestBehavior.AllowGet);
+        }
+        [AuthorizationFilter]
+        public ActionResult UserCreate()
+        {
+            return View();
         }
         [HttpPost]
         public JsonResult SaveUser(User user)
@@ -81,6 +81,48 @@ namespace PointOfSale.Controllers
             POS_TutorialEntities db = new POS_TutorialEntities();
             var dataList = db.Users.Where(x=>x.Status==1).ToList();
             return Json(dataList, JsonRequestBehavior.AllowGet);
+        }
+        [AuthorizationFilter]
+        public ActionResult Category()
+        {
+            return View();
+        }
+        [HttpPost]
+        public JsonResult SaveCategory(Category cat)
+        {
+            POS_TutorialEntities db = new POS_TutorialEntities();
+            bool isSuccess = true;
+            if (cat.CategoryId > 0)
+            {
+                db.Entry(cat).State = EntityState.Modified;
+            }
+            else
+            {
+                cat.Status = 1;
+                db.Categories.Add(cat);
+            }
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                isSuccess = false;
+            }
+            return Json(isSuccess, JsonRequestBehavior.AllowGet);
+        }
+        [HttpGet]
+        public JsonResult GetAllGetegory()
+        {
+            POS_TutorialEntities db = new POS_TutorialEntities();
+            var dataList = db.Categories.Where(x => x.Status == 1).ToList();
+            return Json(dataList, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult Logout()
+        {
+            Session["Username"] = null;
+            Session["Role"] = null;
+            return RedirectToAction("Login");
         }
     }
 }

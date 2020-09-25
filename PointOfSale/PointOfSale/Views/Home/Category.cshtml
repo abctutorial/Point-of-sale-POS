@@ -1,0 +1,130 @@
+﻿
+@{
+    ViewBag.Title = "Category";
+}
+
+@{
+    ViewBag.Title = "UserCreate";
+}
+
+<div class="col-xl-12 col-md-12 mb-12">
+    <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+
+                    <form class="user">
+
+                        <div class="form-group col-md-6">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Create Category</div>
+                        </div>
+                        <input type="hidden" id="categoryId" />
+                        <input type="hidden" id="status" />
+                        <div class="form-group col-md-6">
+                            <input type="text" class="form-control form-control-user" id="categoryName" aria-describedby="emailHelp" placeholder="Category">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <a href="#" onclick="SaveUser()" class="btn btn-primary btn-sm">
+                                Save
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="col-xl-12 col-md-12 mb-12">
+    <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                    <div class="form-group col-md-6">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Category List</div>
+                    </div>
+
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="trDiv"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        GetAllGetegory();
+    });
+
+    function SaveUser() {
+        var category = new Object();
+        category.CategoryId = $("#categoryId").val();
+        category.Name = $("#categoryName").val();
+        category.Status = $("#status").val();
+        var data = JSON.stringify({
+            cat: category
+        });
+        return $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: "/Home/SaveCategory",
+            data: data,
+            success: function (result) {
+                if (result == true) {
+                    GetAllGetegory();
+                    Reset();
+                    alert("Save Success!");
+                }
+                else {
+                    alert("Save failed!");
+                }
+            },
+            error: function () {
+                alert("Error!")
+            }
+        });
+    }
+
+    function GetAllGetegory() {
+        $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'Get',
+            url: "/Home/GetAllGetegory",
+            success: function (data) {
+                $("#trDiv").html('');
+                var tdContent = '';
+                for(var i = 0; i < data.length; i++)
+                {
+                    tdContent += '<tr><td>' + data[i].Name + '</td>' + '<td>' + data[i].Status + '</td>' + '<td><a href="#" onclick="Edit(' + data[i].CategoryId + ",'" + data[i].Name + "'," + data[i].Status + ');">Edit</a></td></tr>'; // if Name is property of your Person object
+                }
+                $("#trDiv").append(tdContent);
+            },
+            error: function () {
+                alert("Error!")
+            }
+        });
+    }
+    function Edit(catId, catName,status) {
+        $("#categoryId").val(catId);
+        $("#categoryName").val(catName);
+        $("#status").val(status);
+    }
+    function Reset() {
+        $("#categoryId").val(null);
+        $("#categoryName").val(null);
+        $("#status").val(null);
+    }
+</script>

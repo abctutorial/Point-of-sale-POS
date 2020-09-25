@@ -12,19 +12,16 @@ namespace PointOfSale.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Product
+    public partial class ProductStock
     {
-        public Product()
-        {
-            this.ProductStocks = new HashSet<ProductStock>();
-        }
+        public int ProductQtyId { get; set; }
+        public Nullable<int> ProductId { get; set; }
+        public Nullable<int> Quantity { get; set; }
+        public Nullable<int> BatchId { get; set; }
+        public Nullable<decimal> PurchasePrice { get; set; }
+        public Nullable<decimal> SalesPrice { get; set; }
     
-        public int ProductId { get; set; }
-        public string Name { get; set; }
-        public Nullable<int> CategoryId { get; set; }
-        public Nullable<int> Status { get; set; }
-    
-        public virtual Category Category { get; set; }
-        public virtual ICollection<ProductStock> ProductStocks { get; set; }
+        public virtual Batch Batch { get; set; }
+        public virtual Product Product { get; set; }
     }
 }

@@ -27,11 +27,12 @@ namespace PointOfSale.Models
     
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Product> Products { get; set; }
-        public virtual DbSet<ProductQuantity> ProductQuantities { get; set; }
         public virtual DbSet<Sale> Sales { get; set; }
         public virtual DbSet<SalesDetail> SalesDetails { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<RolePermission> RolePermissions { get; set; }
+        public virtual DbSet<Batch> Batches { get; set; }
+        public virtual DbSet<ProductStock> ProductStocks { get; set; }
     }
 }

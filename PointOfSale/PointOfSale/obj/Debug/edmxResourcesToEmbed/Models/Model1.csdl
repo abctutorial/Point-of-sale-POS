@@ -18,16 +18,7 @@
     <Property Name="CategoryId" Type="Int32" />
     <Property Name="Status" Type="Int32" />
     <NavigationProperty Name="Category" Relationship="Self.FK_Product_Category" FromRole="Product" ToRole="Category" />
-    <NavigationProperty Name="ProductQuantities" Relationship="Self.FK_ProductQuantity_Product" FromRole="Product" ToRole="ProductQuantity" />
-  </EntityType>
-  <EntityType Name="ProductQuantity">
-    <Key>
-      <PropertyRef Name="ProductQtyId" />
-    </Key>
-    <Property Name="ProductQtyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ProductId" Type="Int32" />
-    <Property Name="Quantity" Type="Int32" />
-    <NavigationProperty Name="Product" Relationship="Self.FK_ProductQuantity_Product" FromRole="ProductQuantity" ToRole="Product" />
+    <NavigationProperty Name="ProductStocks" Relationship="POS_TutorialModel.FK_ProductQuantity_Product1" FromRole="Product" ToRole="ProductStock" />
   </EntityType>
   <EntityType Name="Sale">
     <Key>
@@ -93,18 +84,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_ProductQuantity_Product">
-    <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
-    <End Role="ProductQuantity" Type="Self.ProductQuantity" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Product">
-        <PropertyRef Name="ProductId" />
-      </Principal>
-      <Dependent Role="ProductQuantity">
-        <PropertyRef Name="ProductId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_SalesDetail_Sale">
     <End Role="Sale" Type="Self.Sale" Multiplicity="0..1" />
     <End Role="SalesDetail" Type="Self.SalesDetail" Multiplicity="*" />
@@ -120,7 +99,6 @@
   <EntityContainer Name="POS_TutorialEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="Categories" EntityType="Self.Category" />
     <EntitySet Name="Products" EntityType="Self.Product" />
-    <EntitySet Name="ProductQuantities" EntityType="Self.ProductQuantity" />
     <EntitySet Name="Sales" EntityType="Self.Sale" />
     <EntitySet Name="SalesDetails" EntityType="Self.SalesDetail" />
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
@@ -129,15 +107,21 @@
       <End Role="Category" EntitySet="Categories" />
       <End Role="Product" EntitySet="Products" />
     </AssociationSet>
-    <AssociationSet Name="FK_ProductQuantity_Product" Association="Self.FK_ProductQuantity_Product">
-      <End Role="Product" EntitySet="Products" />
-      <End Role="ProductQuantity" EntitySet="ProductQuantities" />
-    </AssociationSet>
     <AssociationSet Name="FK_SalesDetail_Sale" Association="Self.FK_SalesDetail_Sale">
       <End Role="Sale" EntitySet="Sales" />
       <End Role="SalesDetail" EntitySet="SalesDetails" />
     </AssociationSet>
     <EntitySet Name="RolePermissions" EntityType="POS_TutorialModel.RolePermission" />
+    <EntitySet Name="Batches" EntityType="POS_TutorialModel.Batch" />
+    <EntitySet Name="ProductStocks" EntityType="POS_TutorialModel.ProductStock" />
+    <AssociationSet Name="FK_ProductStock_Batch" Association="POS_TutorialModel.FK_ProductStock_Batch">
+      <End Role="Batch" EntitySet="Batches" />
+      <End Role="ProductStock" EntitySet="ProductStocks" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductQuantity_Product1" Association="POS_TutorialModel.FK_ProductQuantity_Product1">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="ProductStock" EntitySet="ProductStocks" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="RolePermission">
     <Key>
@@ -147,4 +131,49 @@
     <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="Tag" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
   </EntityType>
+  <EntityType Name="Batch">
+    <Key>
+      <PropertyRef Name="BatchId" />
+    </Key>
+    <Property Name="BatchId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="BatchName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ProductStocks" Relationship="POS_TutorialModel.FK_ProductStock_Batch" FromRole="Batch" ToRole="ProductStock" />
+  </EntityType>
+  <EntityType Name="ProductStock">
+    <Key>
+      <PropertyRef Name="ProductQtyId" />
+    </Key>
+    <Property Name="ProductQtyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProductId" Type="Int32" />
+    <Property Name="Quantity" Type="Int32" />
+    <Property Name="BatchId" Type="Int32" />
+    <Property Name="PurchasePrice" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="SalesPrice" Type="Decimal" Precision="18" Scale="0" />
+    <NavigationProperty Name="Batch" Relationship="POS_TutorialModel.FK_ProductStock_Batch" FromRole="ProductStock" ToRole="Batch" />
+    <NavigationProperty Name="Product" Relationship="POS_TutorialModel.FK_ProductQuantity_Product1" FromRole="ProductStock" ToRole="Product" />
+  </EntityType>
+  <Association Name="FK_ProductStock_Batch">
+    <End Type="POS_TutorialModel.Batch" Role="Batch" Multiplicity="0..1" />
+    <End Type="POS_TutorialModel.ProductStock" Role="ProductStock" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Batch">
+        <PropertyRef Name="BatchId" />
+      </Principal>
+      <Dependent Role="ProductStock">
+        <PropertyRef Name="BatchId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductQuantity_Product1">
+    <End Type="POS_TutorialModel.Product" Role="Product" Multiplicity="0..1" />
+    <End Type="POS_TutorialModel.ProductStock" Role="ProductStock" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="ProductId" />
+      </Principal>
+      <Dependent Role="ProductStock">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

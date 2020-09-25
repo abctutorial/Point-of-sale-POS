@@ -1,5 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="POS_TutorialModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Batch">
+    <Key>
+      <PropertyRef Name="BatchId" />
+    </Key>
+    <Property Name="BatchId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BatchName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
   <EntityType Name="Category">
     <Key>
       <PropertyRef Name="CategoryId" />
@@ -17,13 +24,16 @@
     <Property Name="CategoryId" Type="int" />
     <Property Name="Status" Type="int" />
   </EntityType>
-  <EntityType Name="ProductQuantity">
+  <EntityType Name="ProductStock">
     <Key>
       <PropertyRef Name="ProductQtyId" />
     </Key>
     <Property Name="ProductQtyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ProductId" Type="int" />
     <Property Name="Quantity" Type="int" />
+    <Property Name="BatchId" Type="int" />
+    <Property Name="PurchasePrice" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="SalesPrice" Type="decimal" Precision="18" Scale="0" />
   </EntityType>
   <EntityType Name="RolePermission">
     <Key>
@@ -97,13 +107,25 @@
   </Association>
   <Association Name="FK_ProductQuantity_Product">
     <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
-    <End Role="ProductQuantity" Type="Self.ProductQuantity" Multiplicity="*" />
+    <End Role="ProductStock" Type="Self.ProductStock" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Product">
         <PropertyRef Name="ProductId" />
       </Principal>
-      <Dependent Role="ProductQuantity">
+      <Dependent Role="ProductStock">
         <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductStock_Batch">
+    <End Role="Batch" Type="Self.Batch" Multiplicity="0..1" />
+    <End Role="ProductStock" Type="Self.ProductStock" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Batch">
+        <PropertyRef Name="BatchId" />
+      </Principal>
+      <Dependent Role="ProductStock">
+        <PropertyRef Name="BatchId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -120,9 +142,10 @@
     </ReferentialConstraint>
   </Association>
   <EntityContainer Name="POS_TutorialModelStoreContainer">
+    <EntitySet Name="Batch" EntityType="Self.Batch" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="ProductQuantity" EntityType="Self.ProductQuantity" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProductStock" EntityType="Self.ProductStock" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RolePermission" EntityType="Self.RolePermission" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Sale" EntityType="Self.Sale" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SalesDetail" EntityType="Self.SalesDetail" Schema="dbo" store:Type="Tables" />
@@ -134,7 +157,11 @@
     </AssociationSet>
     <AssociationSet Name="FK_ProductQuantity_Product" Association="Self.FK_ProductQuantity_Product">
       <End Role="Product" EntitySet="Product" />
-      <End Role="ProductQuantity" EntitySet="ProductQuantity" />
+      <End Role="ProductStock" EntitySet="ProductStock" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductStock_Batch" Association="Self.FK_ProductStock_Batch">
+      <End Role="Batch" EntitySet="Batch" />
+      <End Role="ProductStock" EntitySet="ProductStock" />
     </AssociationSet>
     <AssociationSet Name="FK_SalesDetail_Sale" Association="Self.FK_SalesDetail_Sale">
       <End Role="Sale" EntitySet="Sale" />

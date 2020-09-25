@@ -4,18 +4,20 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="4023ed1f76eb4636b6b90f2d68a8851d" Name="Diagram1">
+      <Diagram DiagramId="4023ed1f76eb4636b6b90f2d68a8851d" Name="Diagram1" ZoomLevel="74">
         <EntityTypeShape EntityType="POS_TutorialModel.Category" Width="1.5" PointX="0.75" PointY="1.125" IsExpanded="true" />
         <EntityTypeShape EntityType="POS_TutorialModel.Product" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="POS_TutorialModel.ProductQuantity" Width="1.5" PointX="5.25" PointY="1.125" IsExpanded="true" />
         <EntityTypeShape EntityType="POS_TutorialModel.Sale" Width="1.5" PointX="0.75" PointY="5" IsExpanded="true" />
         <EntityTypeShape EntityType="POS_TutorialModel.SalesDetail" Width="1.5" PointX="3" PointY="5.125" IsExpanded="true" />
         <EntityTypeShape EntityType="POS_TutorialModel.sysdiagram" Width="1.5" PointX="5.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="POS_TutorialModel.User" Width="1.5" PointX="5.75" PointY="6.75" IsExpanded="true" />
         <AssociationConnector Association="POS_TutorialModel.FK_Product_Category" ManuallyRouted="false" />
-        <AssociationConnector Association="POS_TutorialModel.FK_ProductQuantity_Product" ManuallyRouted="false" />
         <AssociationConnector Association="POS_TutorialModel.FK_SalesDetail_Sale" ManuallyRouted="false" />
         <EntityTypeShape EntityType="POS_TutorialModel.RolePermission" Width="1.5" PointX="7.375" PointY="0.75" />
+        <EntityTypeShape EntityType="POS_TutorialModel.Batch" Width="1.5" PointX="6" PointY="11.25" />
+        <EntityTypeShape EntityType="POS_TutorialModel.ProductStock" Width="1.5" PointX="8.25" PointY="3.75" />
+        <AssociationConnector Association="POS_TutorialModel.FK_ProductStock_Batch" />
+        <AssociationConnector Association="POS_TutorialModel.FK_ProductQuantity_Product1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

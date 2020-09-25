@@ -169,6 +169,9 @@
     <Compile Include="Helper\AppHelper.cs" />
     <Compile Include="Helper\AuthorizationFilter.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Batch.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Category.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -192,7 +195,7 @@
     <Compile Include="Models\Product.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ProductQuantity.cs">
+    <Compile Include="Models\ProductStock.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\RolePermission.cs">
@@ -2080,6 +2083,7 @@
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\AccessDenied.cshtml" />
     <Content Include="Views\Home\UserCreate.cshtml" />
+    <Content Include="Views\Home\Category.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -54,7 +54,7 @@ namespace PointOfSale.Controllers
             POS_TutorialEntities db = new POS_TutorialEntities();
             bool isSuccess = true;
 
-            if (user.UserId>0)
+            if (user.UserId > 0)
             {
                 db.Entry(user).State = EntityState.Modified;
             }
@@ -79,7 +79,7 @@ namespace PointOfSale.Controllers
         public JsonResult GetAllUser()
         {
             POS_TutorialEntities db = new POS_TutorialEntities();
-            var dataList = db.Users.Where(x=>x.Status==1).ToList();
+            var dataList = db.Users.Where(x => x.Status == 1).ToList();
             return Json(dataList, JsonRequestBehavior.AllowGet);
         }
         [AuthorizationFilter]
@@ -116,13 +116,171 @@ namespace PointOfSale.Controllers
         {
             POS_TutorialEntities db = new POS_TutorialEntities();
             var dataList = db.Categories.Where(x => x.Status == 1).ToList();
-            return Json(dataList, JsonRequestBehavior.AllowGet);
+            var data = dataList.Select(x => new
+            {
+                CategoryId = x.CategoryId,
+                Name = x.Name,
+                Status = x.Status
+            });
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
         public ActionResult Logout()
         {
             Session["Username"] = null;
             Session["Role"] = null;
             return RedirectToAction("Login");
+        }
+        [AuthorizationFilter]
+        public ActionResult Product()
+        {
+            return View();
+        }
+        [HttpPost]
+        public JsonResult SaveProduct(Product product)
+        {
+            POS_TutorialEntities db = new POS_TutorialEntities();
+            bool isSuccess = true;
+
+            if (product.ProductId > 0)
+            {
+                db.Entry(product).State = EntityState.Modified;
+            }
+            else
+            {
+                db.Products.Add(product);
+            }
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                isSuccess = false;
+            }
+
+            return Json(isSuccess, JsonRequestBehavior.AllowGet);
+        }
+        [HttpGet]
+        public JsonResult GetAllProduct()
+        {
+            POS_TutorialEntities db = new POS_TutorialEntities();
+            var dataList = db.Products.Include("Category").ToList();
+            var modefiedData = dataList.Select(x => new
+            {
+                ProductId = x.ProductId,
+                CategoryId = x.CategoryId,
+                Name = x.Name,
+                Status = x.Status,
+                CategoryName = x.Category.Name
+            }).ToList();
+            return Json(modefiedData, JsonRequestBehavior.AllowGet);
+        }
+        [AuthorizationFilter]
+        public ActionResult Batch()
+        {
+            return View();
+        }
+        [HttpPost]
+        public JsonResult SaveBatch(Batch batch)
+        {
+            PointOfSale.Helper.AppHelper.ReturnMessage retMessage = new AppHelper.ReturnMessage();
+            POS_TutorialEntities db = new POS_TutorialEntities();
+            retMessage.IsSuccess = true;
+
+            if (batch.BatchId > 0)
+            {
+                db.Entry(batch).State = EntityState.Modified;
+                retMessage.Messagae = "Update Success!";
+            }
+            else
+            {
+                batch.BatchName = batch.BatchName + db.Batches.Count();
+                var batchData = db.Batches.Where(x => x.BatchName.Equals(batch.BatchName)).SingleOrDefault();
+                if (batchData == null)
+                {
+                    db.Batches.Add(batch);
+                    retMessage.Messagae = "Save Success!";
+                }
+                else
+                {
+                    retMessage.IsSuccess = false;
+                    retMessage.Messagae = "This batch already exist!Please refresh and again try!";
+                }
+            }
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                retMessage.IsSuccess = false;
+            }
+
+            return Json(retMessage, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetAllBatch()
+        {
+            POS_TutorialEntities db = new POS_TutorialEntities();
+            var dataList = db.Batches.ToList();
+            var modefiedData = dataList.Select(x => new
+            {
+                BatchId = x.BatchId,
+                BatchName = x.BatchName,
+            }).ToList();
+            return Json(modefiedData, JsonRequestBehavior.AllowGet);
+        }
+        [AuthorizationFilter]
+        public ActionResult ProductStock()
+        {
+            return View();
+        }
+        [HttpPost]
+        public JsonResult SaveProductStock(ProductStock stock)
+        {
+            PointOfSale.Helper.AppHelper.ReturnMessage retMessage = new AppHelper.ReturnMessage();
+            POS_TutorialEntities db = new POS_TutorialEntities();
+            retMessage.IsSuccess = true;
+
+            if (stock.ProductQtyId > 0)
+            {
+                db.Entry(stock).State = EntityState.Modified;
+                retMessage.Messagae = "Update Success!";
+            }
+            else
+            {
+                db.ProductStocks.Add(stock);
+                retMessage.Messagae = "Save Success!";
+            }
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                retMessage.IsSuccess = false;
+            }
+
+            return Json(retMessage, JsonRequestBehavior.AllowGet);
+        }
+        [HttpGet]
+        public JsonResult GetAllProductStocks()
+        {
+            POS_TutorialEntities db = new POS_TutorialEntities();
+            var dataList = db.ProductStocks.Include("Product").Include("Batch").ToList();
+            var modefiedData = dataList.Select(x => new
+            {
+                ProductQtyId = x.ProductQtyId,
+                ProductId = x.ProductId,
+                ProductName=x.Product.Name,
+                Quantity=x.Quantity,
+                BatchId=x.BatchId,
+                BatchName=x.Batch.BatchName,
+                PurchasePrice=x.PurchasePrice,
+                SalesPrice=x.SalesPrice
+            }).ToList();
+            return Json(modefiedData, JsonRequestBehavior.AllowGet);
         }
     }
 }

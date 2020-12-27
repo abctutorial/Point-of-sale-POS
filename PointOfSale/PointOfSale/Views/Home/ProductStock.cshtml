@@ -1,0 +1,91 @@
+﻿
+@{
+    ViewBag.Title = "ProductStock";
+}
+<div ng-controller="ProductStock">
+    <div class="col-xl-12 col-md-12 mb-12">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+
+                        <form class="user">
+
+                            <div class="form-group col-md-6">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Create Product</div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <select class="form-control" ng-model="ProductStock.ProductId">
+                                    <option ng-repeat="item in ProductList" value="{{item.ProductId}}">{{item.Name}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <select class="form-control" ng-model="ProductStock.BatchId">
+                                    <option ng-repeat="item in BatchList" value="{{item.BatchId}}">{{item.BatchName}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <input type="number" class="form-control form-control-user" ng-model="ProductStock.Quantity" placeholder="Quantity">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <input type="number" class="form-control form-control-user" ng-model="ProductStock.PurchasePrice" placeholder="Purchase Price">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <input type="number" class="form-control form-control-user" ng-model="ProductStock.SalesPrice" placeholder="Sales Price">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <a href="#" ng-click="SaveProductStock()" class="btn btn-primary btn-sm">
+                                    Save
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="col-xl-12 col-md-12 mb-12">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col mr-2">
+                        <div class="form-group col-md-6">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Stock List</div>
+                        </div>
+
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Batch name</th>
+                                    <th>Quantity</th>
+                                    <th>Purchase Price</th>
+                                    <th>Sales Price</th>
+                                    <th>
+                                        Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in ProductStockList">
+                                    <td>{{item.ProductName}}</td>
+                                    <td>{{item.BatchName}}</td>
+                                    <td>{{item.Quantity}}</td>
+                                    <td>{{item.PurchasePrice}}</td>
+                                    <td>{{item.SalesPrice}}</td>
+                                    <td>Edit</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/Home/HomeProductStockController.js"></script>
+
+
+

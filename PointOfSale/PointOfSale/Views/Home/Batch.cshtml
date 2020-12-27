@@ -1,0 +1,120 @@
+﻿
+@{
+    ViewBag.Title = "Batch";
+}
+<div class="col-xl-12 col-md-12 mb-12">
+    <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+
+                    <form class="user">
+
+                        <div class="form-group col-md-6">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Create Batch</div>
+                        </div>
+                        <input type="hidden" id="batchId" />
+                        <div class="form-group col-md-6">
+                            <input type="text" disabled class="form-control form-control-user" id="batchName" aria-describedby="emailHelp" placeholder="Batch" value="Batch">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <a href="#" onclick="SaveBatch()" class="btn btn-primary btn-sm">
+                                Save
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="col-xl-12 col-md-12 mb-12">
+    <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                    <div class="form-group col-md-6">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Batch List</div>
+                    </div>
+
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="trDiv"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        GetAllBatch();
+    });
+
+    function SaveBatch() {
+        var batch = new Object();
+        batch.BatchId = $("#batchId").val();
+        batch.BatchName = $("#batchName").val();
+        var data = JSON.stringify({
+            batch: batch
+        });
+        return $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: "/Home/SaveBatch",
+            data: data,
+            success: function (result) {
+                if (result.IsSuccess == true) {
+                    GetAllBatch();
+                    alert(result.Messagae);
+                }
+                else {
+                    alert(result.Messagae);
+                }
+            },
+            error: function () {
+                alert("Error!")
+            }
+        });
+    }
+
+    function GetAllBatch() {
+        $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'Get',
+            url: "/Home/GetAllBatch",
+            success: function (data) {
+                $("#trDiv").html('');
+                var tdContent = '';
+                for(var i = 0; i < data.length; i++)
+                {
+                    tdContent += '<tr><td>' + data[i].BatchName + '<td><a href="#" onclick="Edit(' + data[i].BatchId + ",'" + data[i].BatchName + "'"+');">Edit</a></td></tr>'; // if Name is property of your Person object
+                }
+                $("#trDiv").append(tdContent);
+            },
+            error: function () {
+                alert("Error!")
+            }
+        });
+    }
+    function Edit(batchId, batchName) {
+        $("#batchId").val(batchId);
+        $("#batchName").val(batchName);
+    }
+    function Reset() {
+        $("#batchId").val(null);
+        $("#batchName").val(null);
+    }
+</script>
+

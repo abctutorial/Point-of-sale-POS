@@ -29,5 +29,10 @@ namespace PointOfSale.Helper
             // Return the hexadecimal string.
             return sBuilder.ToString();
         }
+        public class ReturnMessage
+        {
+            public bool IsSuccess { get; set; }
+            public string Messagae { get; set; }
+        }
     }
 }

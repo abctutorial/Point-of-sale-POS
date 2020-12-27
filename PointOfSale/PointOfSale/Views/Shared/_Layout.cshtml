@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="myApp">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,6 +13,8 @@
     <!-- Custom styles for this template-->
     <link href="~/Template/sbAdmin2/css/sb-admin-2.min.css" rel="stylesheet" />
     <script src="~/Template/sbAdmin2/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/Scripts/Home/app.js"></script>
 </head>
 <body id="page-top">
     <!-- Page Wrapper -->
@@ -41,7 +43,7 @@
             <div class="sidebar-heading">
                 Interface
             </div>
-          
+
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
@@ -50,7 +52,11 @@
                 </a>
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="/Home/UserCreate">User Create</a>
+                        <a class="collapse-item" href="/Home/UserCreate">User management</a>
+                        <a class="collapse-item" href="/Home/Category">Category management</a>
+                        <a class="collapse-item" href="/Home/Product">Product management</a>
+                        <a class="collapse-item" href="/Home/Batch">Batch management</a>
+                        <a class="collapse-item" href="/Home/ProductStock">Stock management</a>
                     </div>
                 </div>
             </li>
@@ -294,8 +300,6 @@
                 @RenderBody()
             </div>
             <!-- End of Main Content -->
-        
-           
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
@@ -331,7 +335,7 @@
             </div>
         </div>
     </div>
-    
+
 
     <!-- Bootstrap core JavaScript-->
 

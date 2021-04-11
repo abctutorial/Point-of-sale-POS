@@ -15,7 +15,7 @@
                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Create Product</div>
                             </div>
                             <div class="form-group col-md-6">
-                                <select class="form-control" ng-model="ProductStock.ProductId">
+                                <select class="form-control" ng-model="ProductStock.ProductId" id="ProductId">
                                     <option ng-repeat="item in ProductList" value="{{item.ProductId}}">{{item.Name}}</option>
                                 </select>
                             </div>
@@ -74,7 +74,7 @@
                                     <td>{{item.Quantity}}</td>
                                     <td>{{item.PurchasePrice}}</td>
                                     <td>{{item.SalesPrice}}</td>
-                                    <td>Edit</td>
+                                    <td><a ng-click="SetForEdit(item)">Edit</a></td>
                                 </tr>
                             </tbody>
                         </table>

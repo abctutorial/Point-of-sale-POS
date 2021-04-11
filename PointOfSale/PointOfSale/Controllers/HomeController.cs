@@ -164,16 +164,20 @@ namespace PointOfSale.Controllers
         public JsonResult GetAllProduct()
         {
             POS_TutorialEntities db = new POS_TutorialEntities();
-            var dataList = db.Products.Include("Category").ToList();
-            var modefiedData = dataList.Select(x => new
-            {
-                ProductId = x.ProductId,
-                CategoryId = x.CategoryId,
-                Name = x.Name,
-                Status = x.Status,
-                CategoryName = x.Category.Name
-            }).ToList();
-            return Json(modefiedData, JsonRequestBehavior.AllowGet);
+            var dataList = (from prd in db.Products.Include("Category").ToList()
+                            join stk in db.ProductStocks on prd.ProductId equals stk.ProductId
+                            where stk.Quantity > 0
+                            select new
+                            {
+                                ProductId = prd.ProductId,
+                                CategoryId = prd.CategoryId,
+                                Name = prd.Name,
+                                Status = prd.Status,
+                                CategoryName = prd.Category.Name
+                            }).ToList();
+                           
+     
+            return Json(dataList, JsonRequestBehavior.AllowGet);
         }
         [AuthorizationFilter]
         public ActionResult Batch()
@@ -281,6 +285,11 @@ namespace PointOfSale.Controllers
                 SalesPrice=x.SalesPrice
             }).ToList();
             return Json(modefiedData, JsonRequestBehavior.AllowGet);
+        }
+        [AuthorizationFilter]
+        public ActionResult Invoice()
+        {
+            return View();
         }
     }
 }

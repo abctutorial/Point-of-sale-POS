@@ -9,34 +9,26 @@
         init(); //init is called
 
         function GetProducts() {
-            $.ajax({
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'json',
-                type: 'Get',
-                url: "/Home/GetAllProduct",
-                success: function (data) {
+            $http.get('/Home/GetAllProduct')
+                .then(function (response) {
+                    var data = response.data;
                     $scope.ProductList = data;
-                },
-                error: function () {
-                    alert("Error!")
-                }
-            });
+                });
         }
         function GetBatchs() {
-            $.ajax({
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'json',
-                type: 'Get',
-                url: "/Home/GetAllBatch",
-                success: function (data) {
+            $http.get('/Home/GetAllBatch')
+                .then(function (response) {
+                    var data = response.data;
                     $scope.BatchList = data;
-                },
-                error: function () {
-                    alert("Error!")
-                }
-            });
+                });
         }
         $scope.SaveProductStock = function () {
+            for (var i = 0; i < $scope.ProductStockList.length; i++) {
+                if (($scope.ProductStock.ProductQtyId <= 0 || $scope.ProductStock.ProductQtyId == "" || $scope.ProductStock.ProductQtyId == null || $scope.ProductStock.ProductQtyId == typeof undefined) && $scope.ProductStockList[i].ProductId == $scope.ProductStock.ProductId && $scope.ProductStockList[i].BatchId == $scope.ProductStock.BatchId) {
+                    alert("You can not select same product,batch again! Please change batch")
+                    return false;
+                }
+            }
             var data = JSON.stringify({
                 stock: $scope.ProductStock
             });
@@ -48,7 +40,7 @@
                 data: data,
                 success: function (result) {
                     if (result.IsSuccess == true) {
-                        //GetAllProduct();
+                        GetAllProductStock();
                         //Reset();
                         alert("Save Success!");
                     }
@@ -62,18 +54,15 @@
             });
         }
         function GetAllProductStock() {
-            $.ajax({
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'json',
-                type: 'Get',
-                url: "/Home/GetAllProductStocks",
-                success: function (data) {
+            $http.get('/Home/GetAllProductStocks')
+                .then(function (response) {
+
+                    var data = response.data;
                     $scope.ProductStockList = data;
-                },
-                error: function () {
-                    alert("Error!")
-                }
-            });
+                });
+        }
+        $scope.SetForEdit = function (item) {
+            $scope.ProductStock = item;
         }
     });
 }).call(angular);

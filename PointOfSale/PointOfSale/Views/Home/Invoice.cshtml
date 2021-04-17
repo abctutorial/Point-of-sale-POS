@@ -58,7 +58,7 @@
                         <tr ng-repeat="cart in InvoiceCart">
                             <td class="center">{{$index+1}}</td>
                             <td class="left strong">
-                                <select ng-model="cart.ProductId">
+                                <select ng-model="cart.ProductId" ng-click="SetValueOfProduct(cart.ProductId)">
                                     <option>--Select--</option>
                                     <option ng-repeat="product in ProductList" value="{{product.ProductId}}">{{product.Name}}</option>
                                 </select>
@@ -66,7 +66,7 @@
                             <td class="left">{{cart.CategoryName}}</td>
 
                             <td class="right"><input ng-model="cart.UnitPrice" value="{{cart.UnitPrice}}"/></td>
-                            <td class="center"><input class="BorderLess" ng-model="cart.Quantity" value="1" type="number" placeholder="Quantity" /></td>
+                            <td class="center"><input class="BorderLess" ng-model="cart.Quantity" ng-change="OnChangeLineTotalSet(cart.ProductId)" value="1" type="number" placeholder="Quantity" /></td>
                             <td class="right"><input value={{cart.Quantity*cart.UnitPrice}}  ng-model="cart.LineTotal" /></td>
                         </tr>
                         <tr>

@@ -173,7 +173,9 @@ namespace PointOfSale.Controllers
                                 CategoryId = prd.CategoryId,
                                 Name = prd.Name,
                                 Status = prd.Status,
-                                CategoryName = prd.Category.Name
+                                CategoryName = prd.Category.Name,
+                                PurchasePrice = stk.PurchasePrice,
+                                SalesPrice = stk.SalesPrice
                             }).ToList();
                            
      

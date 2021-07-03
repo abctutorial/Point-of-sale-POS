@@ -3,16 +3,17 @@
     ViewBag.Title = "Invoice";
 }
 <style>
-    .BorderLess{
-        border:none;
+    .BorderLess {
+        border: none;
     }
 </style>
 <div class="container" ng-controller="HomeInvoice">
     <div class="card">
         <div class="card-header">
-            Invoice
-            <strong>01/01/01/2018</strong>
-            <span class="float-right"> <strong>Status:</strong> Pending</span>
+            <input type="hidden" id="OrderNo" value="@ViewBag.InvoiceNum"/>
+            Order
+            <strong>@ViewBag.InvoiceNum</strong>
+            <span class="float-right"> <a class="btn btn-success" ng-click="SaveInvoice()">Save</a></span>
 
         </div>
         <div class="card-body">
@@ -30,10 +31,10 @@
                 <div class="col-sm-6">
                     <div class="float-right">
                         <div>
-                            <input type="text" class="BorderLess" placeholder="Customer name" />
+                            <input type="text" ng-model="Sale.CustomerName" class="BorderLess" placeholder="Customer name" />
                         </div>
-                        <div><textarea class="BorderLess"  placeholder="Address"></textarea></div>
-                        <div><input class="BorderLess"  type="number" placeholder="Phone" /></div>
+                        <div><textarea class="BorderLess" ng-model="Sale.CustomerAddress" placeholder="Address"></textarea></div>
+                        <div><input class="BorderLess" ng-model="Sale.CustomerPhone" type="number" placeholder="Phone" /></div>
                     </div>
                 </div>
 
@@ -58,16 +59,17 @@
                         <tr ng-repeat="cart in InvoiceCart">
                             <td class="center">{{$index+1}}</td>
                             <td class="left strong">
-                                <select ng-model="cart.ProductId" ng-click="SetValueOfProduct(cart.ProductId)">
+                                <select ng-model="cart.ProductId" ng-click="SetValueOfProduct(cart.ProductId);SubTotalCalculation();">
                                     <option>--Select--</option>
                                     <option ng-repeat="product in ProductList" value="{{product.ProductId}}">{{product.Name}}</option>
                                 </select>
                             </td>
                             <td class="left">{{cart.CategoryName}}</td>
 
-                            <td class="right"><input ng-model="cart.UnitPrice" value="{{cart.UnitPrice}}"/></td>
-                            <td class="center"><input class="BorderLess" ng-model="cart.Quantity" ng-change="OnChangeLineTotalSet(cart.ProductId)" value="1" type="number" placeholder="Quantity" /></td>
-                            <td class="right"><input value={{cart.Quantity*cart.UnitPrice}}  ng-model="cart.LineTotal" /></td>
+                            <td class="right"><input ng-model="cart.UnitPrice" value="{{cart.UnitPrice}}" /></td>
+                            <td class="center"><input class="BorderLess" ng-model="cart.Quantity" ng-change="OnChangeLineTotalSet(cart.ProductId);SubTotalCalculation();" value="1" type="number" placeholder="Quantity" /></td>
+                            <td class="right"><input value={{cart.Quantity*cart.UnitPrice}} ng-model="cart.LineTotal" /></td>
+                            <td><a href="#" ng-click="RowDelete($index)"><i class="fa fa-times"></i></a></td>
                         </tr>
                         <tr>
                             <td>
@@ -89,26 +91,42 @@
                                 <td class="left">
                                     <strong>Subtotal</strong>
                                 </td>
-                                <td class="right">$8.497,00</td>
+                                <td class="right">${{Sale.Subtotal}}</td>
                             </tr>
                             <tr>
                                 <td class="left">
-                                    <strong>Discount (20%)</strong>
+                                    <strong>
+                                        Discount
+                                        <select ng-model="Sale.DiscountParcentage" ng-click="CalculateDiscount()">
+                                            <option value="">--Select--</option>
+                                            <option value="10">10%</option>
+                                            <option value="20">20%</option>
+                                            <option value="30">30%</option>
+                                        </select>
+                                    </strong>
                                 </td>
-                                <td class="right">$1,699,40</td>
+                                <td class="right">${{Sale.DiscountAmount}}</td>
                             </tr>
                             <tr>
                                 <td class="left">
-                                    <strong>VAT (10%)</strong>
+                                    <strong>
+                                        VAT
+                                        <select ng-model="Sale.VatParcentage" ng-click="CalculateVat()">
+                                            <option value="">--Select--</option>
+                                            <option value="10">10%</option>
+                                            <option value="20">20%</option>
+                                            <option value="30">30%</option>
+                                        </select>
+                                    </strong>
                                 </td>
-                                <td class="right">$679,76</td>
+                                <td class="right">${{Sale.VatAmount}}</td>
                             </tr>
                             <tr>
                                 <td class="left">
                                     <strong>Total</strong>
                                 </td>
                                 <td class="right">
-                                    <strong>$7.477,36</strong>
+                                    <strong>${{Sale.TotalAmount}}</strong>
                                 </td>
                             </tr>
                         </tbody>

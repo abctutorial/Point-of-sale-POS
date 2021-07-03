@@ -291,7 +291,35 @@ namespace PointOfSale.Controllers
         [AuthorizationFilter]
         public ActionResult Invoice()
         {
+            ViewBag.InvoiceNum = Guid.NewGuid();
             return View();
+        }
+        [HttpPost]
+        public JsonResult SaveInvoiceSale(Sale sale, List<SalesDetail> salesDetails)
+        {
+            PointOfSale.Helper.AppHelper.ReturnMessage retMessage = new AppHelper.ReturnMessage();
+            POS_TutorialEntities db = new POS_TutorialEntities();
+            retMessage.IsSuccess = true;
+
+            foreach (var item in salesDetails)
+            {
+                sale.SalesDetails.Add(new SalesDetail { ProductId = item.ProductId, UnitPrice = item.UnitPrice, Quantity = item.Quantity, LineTotal = item.LineTotal });
+                var prd = db.ProductStocks.Where(x => x.ProductId == item.ProductId && x.Quantity > 0).FirstOrDefault();
+                prd.Quantity = prd.Quantity - item.Quantity;
+                db.Entry(prd).State = EntityState.Modified;
+            }
+            db.Sales.Add(sale);
+            retMessage.Messagae = "Save Success!";
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                retMessage.IsSuccess = false;
+            }
+
+            return Json(retMessage, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -1,0 +1,48 @@
+﻿
+@{
+    ViewBag.Title = "InvoiceList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="col-xl-12 col-md-12 mb-12" ng-controller="HomeInvoiceList">
+    <h2>Sales record</h2>
+    <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                    
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Order No</th>
+                                <th>
+                                    Customer name
+                                </th>
+                                <th>
+                                    Customer Phone
+                                </th>
+                                <th>
+                                    Sales Date
+                                </th>
+                                <th>
+                                   Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in SalesList">
+                                <td>{{item.OrderNo}}</td>
+                                <td>{{item.CustomerName}}</td>
+                                <td>{{item.CustomerPhone}} </td>
+                                <td> {{item.OrderDate}}</td>
+                                <td><a href="#" class="btn btn-success">Detail</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/Home/HomeInvoiceListController.js"></script>

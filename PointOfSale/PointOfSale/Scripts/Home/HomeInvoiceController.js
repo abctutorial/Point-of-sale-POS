@@ -25,9 +25,7 @@
             $scope.InvoiceCart[index].LineTotal = $scope.InvoiceCart[index].UnitPrice * $scope.InvoiceCart[index].Quantity;
         }
         $scope.OnChangeLineTotalSet = function (productId) {
-
             const index = $scope.InvoiceCart.findIndex((x) => x.ProductId === productId);
-
             $scope.InvoiceCart[index].LineTotal = $scope.InvoiceCart[index].UnitPrice * $scope.InvoiceCart[index].Quantity;
         }
         $scope.SubTotalCalculation = function () {

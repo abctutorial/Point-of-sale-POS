@@ -321,5 +321,26 @@ namespace PointOfSale.Controllers
 
             return Json(retMessage, JsonRequestBehavior.AllowGet);
         }
+        [AuthorizationFilter]
+        public ActionResult InvoiceList()
+        {
+            return View();
+        }
+        [HttpGet]
+        public JsonResult GetAllSales()
+        {
+            POS_TutorialEntities db = new POS_TutorialEntities();
+            var dataList = db.Sales.ToList();
+            var modefiedData = dataList.Select(x => new
+            {
+                OrderNo = x.OrderNo,
+                CustomerName = x.CustomerName,
+                CustomerPhone = x.CustomerPhone,
+                CustomerAddress = x.CustomerAddress,
+                OrderDate = x.OrderDate,
+                TotalAmout = x.TotalAmout
+            }).ToList();
+            return Json(modefiedData, JsonRequestBehavior.AllowGet);
+        }
     }
 }

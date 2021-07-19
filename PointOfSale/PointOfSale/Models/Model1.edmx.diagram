@@ -9,7 +9,6 @@
         <EntityTypeShape EntityType="POS_TutorialModel.Product" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
         <EntityTypeShape EntityType="POS_TutorialModel.Sale" Width="1.5" PointX="0.75" PointY="5" IsExpanded="true" />
         <EntityTypeShape EntityType="POS_TutorialModel.SalesDetail" Width="1.5" PointX="3" PointY="5.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="POS_TutorialModel.sysdiagram" Width="1.5" PointX="5.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="POS_TutorialModel.User" Width="1.5" PointX="5.75" PointY="6.75" IsExpanded="true" />
         <AssociationConnector Association="POS_TutorialModel.FK_Product_Category" ManuallyRouted="false" />
         <AssociationConnector Association="POS_TutorialModel.FK_SalesDetail_Sale" ManuallyRouted="false" />

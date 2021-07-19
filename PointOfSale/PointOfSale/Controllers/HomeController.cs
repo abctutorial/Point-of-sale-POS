@@ -333,6 +333,7 @@ namespace PointOfSale.Controllers
             var dataList = db.Sales.ToList();
             var modefiedData = dataList.Select(x => new
             {
+                SalesId = x.SalesId,
                 OrderNo = x.OrderNo,
                 CustomerName = x.CustomerName,
                 CustomerPhone = x.CustomerPhone,
@@ -341,6 +342,32 @@ namespace PointOfSale.Controllers
                 TotalAmout = x.TotalAmout
             }).ToList();
             return Json(modefiedData, JsonRequestBehavior.AllowGet);
+        }
+        [HttpGet]
+        public JsonResult GetInvoiceBySalesId(int salesId)
+        {
+            POS_TutorialEntities db = new POS_TutorialEntities();
+            List<Sale> dataList = (from sd in db.SalesDetails.ToList()
+                           join s in db.Sales on sd.SalesId equals s.SalesId
+                           where sd.SalesId==salesId
+                           select new Sale {
+                               SalesId=(int)sd.SalesId,
+                               OrderNo=s.OrderNo,
+                               CustomerName=s.CustomerName,
+                               CustomerPhone = s.CustomerPhone,
+                               CustomerAddress = s.CustomerAddress,
+                               OrderDate=s.OrderDate,
+                               PaymentMethod = s.PaymentMethod,
+                               TotalAmout = s.TotalAmout,
+                               SalesDetailId = sd.SalesDetailId,
+                               ProductId=sd.ProductId,
+                               UnitPrice=sd.UnitPrice,
+                               Quantity=sd.Quantity,
+                               LineTotal=sd.LineTotal,
+                               DiscountParcentage=s.DiscountParcentage,
+                               VatParcentage = s.VatParcentage
+                           }).ToList();
+            return Json(dataList, JsonRequestBehavior.AllowGet);
         }
     }
 }

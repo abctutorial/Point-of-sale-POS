@@ -11,7 +11,8 @@ namespace PointOfSale.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public partial class Sale
     {
         public Sale()
@@ -30,7 +31,20 @@ namespace PointOfSale.Models
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
         public Nullable<int> Status { get; set; }
+        public Nullable<double> Subtotal { get; set; }
+        public Nullable<int> DiscountParcentage { get; set; }
+        public Nullable<int> VatParcentage { get; set; }
     
         public virtual ICollection<SalesDetail> SalesDetails { get; set; }
+        [NotMapped]
+        public int SalesDetailId { get; set; }
+        [NotMapped]
+        public Nullable<int> ProductId { get; set; }
+        [NotMapped]
+        public Nullable<double> UnitPrice { get; set; }
+        [NotMapped]
+        public Nullable<int> Quantity { get; set; }
+        [NotMapped]
+        public Nullable<double> LineTotal { get; set; }
     }
 }

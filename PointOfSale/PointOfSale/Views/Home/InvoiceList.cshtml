@@ -6,12 +6,143 @@
 
 
 <div class="col-xl-12 col-md-12 mb-12" ng-controller="HomeInvoiceList">
-    <h2>Sales record</h2>
-    <div class="card border-left-primary shadow h-100 py-2">
+    <div class="card" ng-show="invoice">
+        <div class="card-header">
+            Order
+            <strong>{{Sale.OrderNo}}</strong>
+            <span class="float-right"> <a class="btn btn-success" ng-click="SaveInvoice()">Save</a></span>
+
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-sm-6">
+                    <div>
+                        <strong>abctutorial</strong>
+                    </div>
+                    <div>Madalinskiego 8</div>
+                    <div>71-101 Szczecin, Poland</div>
+                    <div>Email: info@webz.com.pl</div>
+                    <div>Phone: +48 444 666 3333</div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="float-right">
+                        <div>
+                            <input type="text" ng-model="Sale.CustomerName" class="BorderLess" placeholder="Customer name" />
+                        </div>
+                        <div><textarea class="BorderLess" ng-model="Sale.CustomerAddress" placeholder="Address"></textarea></div>
+                        <div><input class="BorderLess" ng-model="Sale.CustomerPhone" type="number" placeholder="Phone" /></div>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <div class="table-responsive-sm">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="center">#</th>
+                            <th>Item</th>
+                            <th>Category</th>
+
+                            <th class="right">Unit Cost</th>
+                            <th class="center">Qty</th>
+                            <th class="right">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="cart in InvoiceCart">
+                            <td class="center">{{$index+1}}</td>
+                            <td class="left strong">
+                                <select ng-model="cart.ProductId" ng-click="SetValueOfProduct(cart.ProductId);SubTotalCalculation();">
+                                    <option>--Select--</option>
+                                    <option ng-repeat="product in ProductList" value="{{product.ProductId}}">{{product.Name}}</option>
+                                </select>
+                            </td>
+                            <td class="left">{{cart.CategoryName}}</td>
+
+                            <td class="right"><input ng-model="cart.UnitPrice" value="{{cart.UnitPrice}}" /></td>
+                            <td class="center"><input class="BorderLess" ng-model="cart.Quantity" ng-change="OnChangeLineTotalSet(cart.ProductId);SubTotalCalculation();" value="1" type="number" placeholder="Quantity" /></td>
+                            <td class="right"><input value={{cart.Quantity*cart.UnitPrice}} ng-model="cart.LineTotal" /></td>
+                            <td><a href="#" ng-click="RowDelete($index)"><i class="fa fa-times"></i></a></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="#" ng-click="AddNewRow()"><i class="fa fa-plus"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-sm-5">
+
+                </div>
+
+                <div class="col-lg-4 col-sm-5 ml-auto">
+                    <table class="table table-clear">
+                        <tbody>
+                            <tr>
+                                <td class="left">
+                                    <strong>Subtotal</strong>
+                                </td>
+                                <td class="right">${{Sale.Subtotal}}</td>
+                            </tr>
+                            <tr>
+                                <td class="left">
+                                    <strong>
+                                        Discount
+                                        <select ng-model="Sale.DiscountParcentage" ng-click="CalculateDiscount()">
+                                            <option value="">--Select--</option>
+                                            <option value="10">10%</option>
+                                            <option value="20">20%</option>
+                                            <option value="30">30%</option>
+                                        </select>
+                                    </strong>
+                                </td>
+                                <td class="right">${{Sale.DiscountAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td class="left">
+                                    <strong>
+                                        VAT
+                                        <select ng-model="Sale.VatParcentage" ng-click="CalculateVat()">
+                                            <option value="">--Select--</option>
+                                            <option value="10">10%</option>
+                                            <option value="20">20%</option>
+                                            <option value="30">30%</option>
+                                        </select>
+                                    </strong>
+                                </td>
+                                <td class="right">${{Sale.VatAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td class="left">
+                                    <strong>Total</strong>
+                                </td>
+                                <td class="right">
+                                    <strong>${{Sale.TotalAmout}}</strong>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <a href="#" class="btn btn-danger" ng-click="ShowHideEdit()"><i class="fa fa-times"></i>Cancel</a>
+
+        </div>
+    </div>
+
+    
+    <div class="card border-left-primary shadow h-100 py-2" ng-show="list">
+        <h2>Sales record</h2>
         <div class="card-body">
             <div class="row no-gutters align-items-center">
                 <div class="col mr-2">
-                    
+
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
@@ -26,7 +157,7 @@
                                     Sales Date
                                 </th>
                                 <th>
-                                   Action
+                                    Action
                                 </th>
                             </tr>
                         </thead>
@@ -36,7 +167,7 @@
                                 <td>{{item.CustomerName}}</td>
                                 <td>{{item.CustomerPhone}} </td>
                                 <td> {{item.OrderDate}}</td>
-                                <td><a href="#" class="btn btn-success">Detail</a></td>
+                                <td><a href="#" class="btn btn-success" ng-click="ShowHideEdit();GetInvoiceSalesBySalesId(item.SalesId);"><i class="fa fa-edit"></i>Edit</a></td>
                             </tr>
                         </tbody>
                     </table>

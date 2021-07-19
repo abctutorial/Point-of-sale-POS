@@ -36,6 +36,9 @@
     <Property Name="CreatedOn" Type="DateTime" Precision="3" />
     <Property Name="Status" Type="Int32" />
     <NavigationProperty Name="SalesDetails" Relationship="Self.FK_SalesDetail_Sale" FromRole="Sale" ToRole="SalesDetail" />
+    <Property Name="Subtotal" Type="Double" />
+    <Property Name="DiscountParcentage" Type="Int32" />
+    <Property Name="VatParcentage" Type="Int32" />
   </EntityType>
   <EntityType Name="SalesDetail">
     <Key>
@@ -51,16 +54,6 @@
     <Property Name="CreatedOn" Type="DateTime" Precision="3" />
     <Property Name="Status" Type="Int32" />
     <NavigationProperty Name="Sale" Relationship="Self.FK_SalesDetail_Sale" FromRole="SalesDetail" ToRole="Sale" />
-  </EntityType>
-  <EntityType Name="sysdiagram">
-    <Key>
-      <PropertyRef Name="diagram_id" />
-    </Key>
-    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="principal_id" Type="Int32" Nullable="false" />
-    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="version" Type="Int32" />
-    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
   </EntityType>
   <EntityType Name="User">
     <Key>
@@ -101,7 +94,6 @@
     <EntitySet Name="Products" EntityType="Self.Product" />
     <EntitySet Name="Sales" EntityType="Self.Sale" />
     <EntitySet Name="SalesDetails" EntityType="Self.SalesDetail" />
-    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
     <EntitySet Name="Users" EntityType="Self.User" />
     <AssociationSet Name="FK_Product_Category" Association="Self.FK_Product_Category">
       <End Role="Category" EntitySet="Categories" />

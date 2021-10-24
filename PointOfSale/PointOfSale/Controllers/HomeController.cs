@@ -362,6 +362,7 @@ namespace PointOfSale.Controllers
                                SalesDetailId = sd.SalesDetailId,
                                ProductId=sd.ProductId,
                                UnitPrice=sd.UnitPrice,
+                               Subtotal=s.Subtotal,
                                Quantity=sd.Quantity,
                                LineTotal=sd.LineTotal,
                                DiscountParcentage=s.DiscountParcentage,

@@ -58,7 +58,7 @@
                             <td class="left strong">
                                 <select ng-model="cart.ProductId" ng-click="SetValueOfProduct(cart.ProductId);SubTotalCalculation();">
                                     <option>--Select--</option>
-                                    <option ng-repeat="product in ProductList" value="{{product.ProductId}}">{{product.Name}}</option>
+                                    <option ng-repeat="product in ProductList" ng-selected="product.ProductId==cart.ProductId" value="{{product.ProductId}}">{{product.Name}}</option>
                                 </select>
                             </td>
                             <td class="left">{{cart.CategoryName}}</td>

@@ -15,26 +15,44 @@
                     $scope.SalesList = data;
                 });
         }
+        function GetProducts() {
+            $http.get('/Home/GetAllProduct')
+                .then(function (response) {
+                    var data = response.data;
+                    $scope.ProductList = data;
+                });
+        }
         $scope.ShowHideEdit = function () {
             $scope.list = $scope.list == true ? false : true;
             $scope.invoice = $scope.invoice == true ? false : true;
         }
         $scope.GetInvoiceSalesBySalesId = function (salesId) {
+            GetProducts();
             $http.get('/Home/GetInvoiceBySalesId', { params: { salesId: salesId } })
                 .then(function (response) {
                     var data = response.data;
-                    $scope.SalesList = data;
-                    $scope.Sale.OrderNo = $scope.SalesList[0].OrderNo;
-                    $scope.Sale.CustomerName = $scope.SalesList[0].CustomerName;
-                    $scope.Sale.CustomerAddress = $scope.SalesList[0].CustomerAddress;
-                    $scope.Sale.CustomerPhone = parseInt($scope.SalesList[0].CustomerPhone);
-                    $scope.Sale.Subtotal = $scope.SalesList[0].Subtotal;
-                    $scope.Sale.DiscountParcentage = $scope.SalesList[0].DiscountParcentage;
+                    $scope.InvoiceCart = data;
+                    $scope.Sale.OrderNo = $scope.InvoiceCart[0].OrderNo;
+                    $scope.Sale.CustomerName = $scope.InvoiceCart[0].CustomerName;
+                    $scope.Sale.CustomerAddress = $scope.InvoiceCart[0].CustomerAddress;
+                    $scope.Sale.CustomerPhone = parseInt($scope.InvoiceCart[0].CustomerPhone);
+                    $scope.Sale.Subtotal = $scope.InvoiceCart[0].Subtotal;
+                    $scope.Sale.DiscountParcentage = $scope.InvoiceCart[0].DiscountParcentage;
               
-                    $scope.Sale.VatParcentage = $scope.SalesList[0].VatParcentage;
+                    $scope.Sale.VatParcentage = $scope.InvoiceCart[0].VatParcentage;
           
-                    $scope.Sale.TotalAmout = $scope.SalesList[0].TotalAmout;
+                    $scope.Sale.TotalAmout = $scope.InvoiceCart[0].TotalAmout;
+                    $scope.CalculateDiscount();
+                    $scope.CalculateVat();
                 });
+        }
+        $scope.CalculateDiscount = function () {
+            $scope.Sale.DiscountAmount = ($scope.Sale.Subtotal * $scope.Sale.DiscountParcentage) / 100;
+        }
+        $scope.CalculateVat = function () {
+            $scope.Sale.VatAmount = (($scope.Sale.Subtotal - $scope.Sale.DiscountAmount) * $scope.Sale.VatParcentage) / 100;
+            //$scope.Sale.TotalAmount = ($scope.Sale.Subtotal - $scope.Sale.DiscountAmount) + $scope.Sale.VatAmount;
+            //$scope.Sale.TotalAmout = ($scope.Sale.Subtotal - $scope.Sale.DiscountAmount) + $scope.Sale.VatAmount;
         }
     });
 }).call(angular);

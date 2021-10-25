@@ -46,6 +46,8 @@
                     $scope.CalculateVat();
                 });
         }
+
+
         $scope.CalculateDiscount = function () {
             $scope.Sale.DiscountAmount = ($scope.Sale.Subtotal * $scope.Sale.DiscountParcentage) / 100;
         }

@@ -10,7 +10,7 @@
         <div class="card-header">
             Order
             <strong>{{Sale.OrderNo}}</strong>
-            <span class="float-right"> <a class="btn btn-success" ng-click="SaveInvoice()">Save</a></span>
+            <span class="float-right"> <a class="btn btn-success" ng-click="EditInvoice()">Save</a></span>
 
         </div>
         <div class="card-body">
@@ -66,7 +66,7 @@
                             <td class="right"><input ng-model="cart.UnitPrice" value="{{cart.UnitPrice}}" /></td>
                             <td class="center"><input class="BorderLess" ng-model="cart.Quantity" ng-change="OnChangeLineTotalSet(cart.ProductId);SubTotalCalculation();" value="1" type="number" placeholder="Quantity" /></td>
                             <td class="right"><input value={{cart.Quantity*cart.UnitPrice}} ng-model="cart.LineTotal" /></td>
-                            <td><a href="#" ng-click="RowDelete($index)"><i class="fa fa-times"></i></a></td>
+                            <td><a href="#" ng-click="RowDelete($index,cart.SalesDetailId)"><i class="fa fa-times"></i></a></td>
                         </tr>
                         <tr>
                             <td>
